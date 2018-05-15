@@ -10,6 +10,7 @@ git clone https://github.com/peppelinux/SQL4students.git
 git add -A
 git commit -a -m "Sintetic description about what you've done"
 
+# then upload your code in remote repository
 git push 
 ````
 
@@ -18,17 +19,24 @@ It could be helpfull understand how to undo a wrong commit
 
 ````
 git commit -a --amend
-# then change message or exit from console editor (CTRL+X if you're using nano)
+# then change message or exit from console editor (CTRL+X if you're using nano or :wq if vim)
 git push -f
 ````
 
-#### Merge parent repository
+#### Update local repository
 It happens that the master/parent repository goes ahead from your forked repository.
-You should merge all the newly changed things into your repository and then
+You should merge all the newly changed things into your repository and then sync your local folder
 
 ````
 # sync remote merged repository with your local folder
 git pull
+````
+
+#### force a pull
+This is usefull if you have to force a pull even if you have some uncommitted or a different committed situation
+````
+git fetch --all
+git reset --hard origin/master
 ````
 
 #### destroy commit history
@@ -51,12 +59,6 @@ git remote add origin $GITREPO_URL
 git config master.remote origin
 git config master.merge refs/heads/master
 git push --set-upstream origin master
-````
-#### force a pull
-This is usefull if you have to force a pull even if you have some uncommitted or a different committed situation
-````
-git fetch --all
-git reset --hard origin/master
 ````
 #### store credentials
 It happens to write too much your login/password for a push.
