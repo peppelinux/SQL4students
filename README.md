@@ -36,6 +36,23 @@ Examplified Standard SQL queries.
 == and = means equal
 | and OR means or
 & and AND means and
+
++=	Add equals
+-=	Subtract equals
+*=	Multiply equals
+/=	Divide equals
+%=	Modulo equals
+&=	Bitwise AND equals
+^-=	Bitwise exclusive equals
+|*=	Bitwise OR equals
+
+=	Equal to	
+>	Greater than	
+<	Less than	
+>=	Greater than or equal to	
+<=	Less than or equal to	
+<>	Not equal to
+
 ALL	TRUE if all of the subquery values meet the condition	
 AND	TRUE if all the conditions separated by AND is TRUE	
 ANY	TRUE if any of the subquery values meet the condition	
