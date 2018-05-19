@@ -51,9 +51,25 @@ CREATE TABLE `esame_sostenuto` (
   KEY `fk_esame_sostenuto_studente1_idx` (`studente_id`),
   CONSTRAINT `fk_esame_sostenuto_corso` FOREIGN KEY (`corso_id`) REFERENCES `corso` (`id_corso`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_esame_sostenuto_studente1` FOREIGN KEY (`studente_id`) REFERENCES `studente` (`id_studente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `esame_sostenuto` */
+
+insert  into `esame_sostenuto`(`id_esame_sostenuto`,`corso_id`,`studente_id`,`voto`,`data`) values 
+(1,1,1,27,'2018-05-16 14:50:53'),
+(3,5,5,12,'2018-05-14 14:51:05'),
+(4,5,1,11,'2018-05-30 14:51:25'),
+(5,3,5,23,'2018-05-28 14:51:44'),
+(6,2,1,30,'2018-05-08 14:51:54'),
+(7,2,2,28,'2018-05-14 14:52:08'),
+(8,4,3,29,'2018-05-11 14:52:22'),
+(9,4,1,18,'2018-05-27 14:52:31'),
+(10,3,3,9,'2018-05-15 14:52:48'),
+(11,4,4,26,'2018-05-08 14:52:59'),
+(12,2,5,24,'2018-05-17 14:53:29'),
+(13,3,1,21,'2018-05-02 14:53:41'),
+(14,4,1,16,'2018-05-14 16:23:06'),
+(15,4,1,17,'2018-05-24 16:23:02');
 
 /*Table structure for table `studente` */
 
@@ -65,7 +81,7 @@ CREATE TABLE `studente` (
   `cognome` varchar(45) DEFAULT NULL,
   `matricola` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_studente`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `studente` */
 
@@ -76,7 +92,8 @@ insert  into `studente`(`id_studente`,`nome`,`cognome`,`matricola`) values
 (4,'bruce','waine',654321),
 (5,'peter','parker',2345),
 (6,'claude','debussy',7834),
-(7,'','enoch',NULL);
+(7,'','enoch',NULL),
+(8,'giuseppe','de marco',89452);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

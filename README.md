@@ -13,13 +13,18 @@ These queries have been tested on MySQL.
         * [SELECT](#select)
             * [ORDER BY](#order-by)
             * [LIMIT](#limit)
-        * [DISTINCT](#distinct)
+            * [DISTINCT](#distinct)
         * [WHERE clause](#where)
+            * [IN](#in)
             * [LIKE](#like)
             * [AND OR NOT](#and-or-not)
             * [COUNT](#count)
         * [JOINS](#joins)
-        * [COUNT, MIN, MAX, AVG, SUM](#count-min-max-avg-sum)
+        * OCCOURENCES AND ANALISYS
+            * [COUNT, MIN, MAX, AVG, SUM](#count-min-max-avg-sum)
+        * [HAVING](#having)
+        * SUBQUERIES
+            * [EXISTS, ANY, ALL](#exists-any-all)
 <!--te-->
 
 ### Databases used
@@ -87,7 +92,7 @@ Specifies the number of records to return.
 SELECT nome, cognome, matricola FROM studente LIMIT 2;
 ````
 
-#### DISTINCT
+##### DISTINCT
 It distinguishes all the values and returns everything but the duplicates.
 ````
 -- it takes all the cognome values in studente tables
@@ -114,6 +119,11 @@ SELECT * FROM studente WHERE nome IS NULL OR nome="";
 ````
 ###### [Warning] *Mind that there's difference between NULL and ""!*
 
+##### IN
+It's a shorthand for multiple OR conditions.
+````
+SELECT * FROM studente WHERE cognome IN ("de marco", "debussy");
+````
 
 ##### LIKE
 ````
@@ -134,34 +144,100 @@ OR cognome LIKE "d%";
 ````
 
 ##### JOINS
-SELF JOIN: Standard JOIN
-(INNER) JOIN: Returns records that have matching values in both tables
-LEFT (OUTER) JOIN: Return all records from the left table, and the matched records from the right table
-RIGHT (OUTER) JOIN: Return all records from the right table, and the matched records from the left table
-FULL (OUTER) JOIN: Return all records when there is a match in either left or right table
+- SELF JOIN: Standard JOIN, merge a table resultset with another standing to WHERE condition matching
+- (INNER) JOIN: Returns records that have matching values in both tables (same result as SELF)
+- LEFT (OUTER) JOIN: Return all records from the left table, and the matched records from the right table
+- RIGHT (OUTER) JOIN: Return all records from the right table, and the matched records from the left table
+- FULL (OUTER) JOIN: Return all records when there is a match in either left or right table
 
 ````
--- JOIN (quite standard)
+-- JOIN
 SELECT *
 FROM corso AS C, esame_sostenuto AS E, studente AS S
 WHERE C.id_corso = E.corso_id AND 
       S.id_studente = E.studente_id
       ORDER BY voto DESC;
 
--- INNER JOIN (same as previous)
+-- INNER JOIN (same result as previous)
 SELECT *
+FROM esame_sostenuto
+INNER JOIN corso ON esame_sostenuto.corso_id=corso.id_corso
+INNER JOIN studente ON esame_sostenuto.studente_id=studente.id_studente;
+
+-- more selective
+SELECT corso.nome, esame_sostenuto.voto, studente.matricola, studente.nome, studente.cognome
 FROM esame_sostenuto
 INNER JOIN corso ON esame_sostenuto.corso_id=corso.id_corso
 INNER JOIN studente ON esame_sostenuto.studente_id=studente.id_studente;
 ````
 
-##### COUNT, MIN, MAX, AVG, SUM
+#### COUNT, MIN, MAX, AVG, SUM
 ````
--- takes only selected columns from studente table if cognome starts with "de(everything)"
+-- takes only selected columns from studente table if cognome starts with "de(*everything)"
 SELECT cognome, COUNT(cognome) FROM studente WHERE cognome="de marco";
 
+-- how many time a course presents students with a vote greater or equal to 26
+SELECT COUNT(corso.nome), esame_sostenuto.voto
+FROM esame_sostenuto
+INNER JOIN corso ON esame_sostenuto.corso_id=corso.id_corso
+INNER JOIN studente ON esame_sostenuto.studente_id=studente.id_studente
+WHERE esame_sostenuto.voto >= 26
+GROUP BY corso.nome;
 
+-- how many time a course presents vote lower or equal than 20, which students.
+-- mind that: esame_sostenuto.voto have always the last vote registered 
+-- example, 17403 got 16 and then 18: only 18 is in the result.
+SELECT corso.nome AS corso, COUNT(corso.nome) AS occurrences, 
+       esame_sostenuto.voto, 
+       studente.matricola, studente.nome,  studente.cognome
+FROM esame_sostenuto
+INNER JOIN corso ON esame_sostenuto.corso_id=corso.id_corso
+INNER JOIN studente ON esame_sostenuto.studente_id=studente.id_studente
+WHERE esame_sostenuto.voto <= 20
+GROUP BY corso.nome, studente.matricola;
 
+-- vote average|mean by courses
+SELECT corso.nome, AVG(esame_sostenuto.voto) AS "media voto"
+FROM corso, esame_sostenuto, studente
+WHERE corso.id_corso = esame_sostenuto.corso_id AND 
+      studente.id_studente = esame_sostenuto.studente_id
+      GROUP BY corso.nome;
 ````
 
+#### HAVING
+Which students fails more than a time a course test
+````
+SELECT corso.nome AS corso, 
+       COUNT(corso.nome) AS occurrences, 
+       esame_sostenuto.voto, 
+       studente.matricola, studente.nome, studente.cognome
+FROM corso, esame_sostenuto, studente
+WHERE corso.id_corso = esame_sostenuto.corso_id AND 
+      studente.id_studente = esame_sostenuto.studente_id
+      AND esame_sostenuto.voto < 18
+      GROUP BY corso.nome, studente.matricola
+      HAVING occurrences > 1;
+````
 
+#### EXISTS, ANY, ALL
+Exists filters out an answer by a subquery. 
+It passes FROM variable (studente) to the subquery for WHERE statement
+````
+SELECT studente.matricola, studente.nome, studente.cognome
+FROM studente
+WHERE EXISTS(
+SELECT voto
+FROM esame_sostenuto
+WHERE esame_sostenuto.studente_id = studente.id_studente
+      AND voto < 18);
+````
+
+The ANY operator returns true if any of the subquery values meet the condition.
+The ALL operator returns true if all of the subquery values meet the condition.
+They all works with subquery
+
+````
+SELECT studente.matricola, studente.nome, studente.cognome
+FROM studente
+WHERE id_studente= ANY (SELECT studente_id FROM esame_sostenuto WHERE esame_sostenuto.voto <= 18);
+````
