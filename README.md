@@ -12,6 +12,7 @@ These queries have been tested on MySQL.
    * [Queries](#queries)
         * [SELECT](#select)
             * [ORDER BY](#order-by)
+            * [LIMIT](#limit)
         * [DISTINCT](#distinct)
         * [WHERE clause](#where)
             * [LIKE](#like)
@@ -80,7 +81,11 @@ SELECT cognome, matricola FROM studente;
 SELECT cognome, matricola FROM studente ORDER BY cognome ASC;
 SELECT cognome, matricola FROM studente ORDER BY cognome DESC;
 ````
-
+##### LIMIT
+Specifies the number of records to return.
+````
+SELECT nome, cognome, matricola FROM studente LIMIT 2;
+````
 
 #### DISTINCT
 It distinguishes all the values and returns everything but the duplicates.
