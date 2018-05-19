@@ -54,8 +54,8 @@ SELECT DISTINCT cognome FROM studente;
 #### WHERE
 WHERE is a condition and works like a filter on the selected fields.
 Only the fields that corrispond to the WHERE clause will be returned, it works like an IF statement.
-- "takes these that match to this condition(s)"
-- "takes these if they match to this IF (where) statement"
+- "takes those that match this condition(s)"
+- "takes these if they match this IF (where) statement"
 
 ````
 SELECT cognome, matricola FROM studente WHERE cognome="de marco";
