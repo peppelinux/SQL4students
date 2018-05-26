@@ -13,9 +13,10 @@ CREATE DATABASE ${DB} CHARACTER SET utf8 COLLATE utf8_general_ci;\
 GRANT ALL PRIVILEGES ON ${DB}.* TO ${USER}@'${HOST}';"
 ````
 
-## TROUBLESHOOTING SECTION:
+## Troubleshooting:
+#### ERROR 1698 OR 1044 OR 1045
 
-#### ERROR 1698 OR 1044 OR 1045 (IF YOU HAVE SOME PROBLEM TO CONNECT AS USER: ROOT ON YOUR SQL SERVER (like MariaDB or MySQL)):
+I you have experiencing problems to connect as user: root on your MariaDB server.
 ````
 sudo mysql -u root
 use mysql;
