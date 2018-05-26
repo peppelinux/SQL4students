@@ -16,7 +16,7 @@ GRANT ALL PRIVILEGES ON ${DB}.* TO ${USER}@'${HOST}';"
 ## Troubleshooting:
 #### ERROR 1698 OR 1044 OR 1045
 
-I you have experiencing problems to connect as user: root on your MariaDB server.
+I you have experiencing problems to connect as user root on your MariaDB server this could be helpfull
 ````
 sudo mysql -u root
 use mysql;
