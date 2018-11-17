@@ -38,6 +38,11 @@ This is usefull if you have to force a pull even if you have some uncommitted or
 git fetch --all
 git reset --hard origin/master
 ````
+#### remove/undo the last commit or file changes
+````
+git reset --hard HEAD^^
+git pull
+````
 
 #### destroy commit history
 This is usefull if you want to rebase your commit timeline
